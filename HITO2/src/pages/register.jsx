@@ -1,6 +1,7 @@
 
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import registroTejidos from '../assets/registro-tejidos.png'
 import '../css/Register.css'
 
 function Register() {
@@ -48,7 +49,7 @@ function Register() {
 
       <div className="register-content">
         <img
-          src="/src/assets/registro-tejidos.png"
+          src={registroTejidos}
           alt="Ovillos de lana y tejidos artesanales"
           className="register-image"
         />

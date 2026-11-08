@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import loginTejidos from '../assets/login-tejidos.png'
 import "../css/Login.css";
 
 function Login() {
@@ -40,7 +41,7 @@ function Login() {
 
       <div className="login-content">
         <img
-          src="/src/assets/login-tejidos.png"
+          src={loginTejidos}
           alt="Tejidos artesanales"
           className="login-image"
         />

@@ -8,6 +8,7 @@
 | Vite | Herramienta para crear y ejecutar el proyecto frontend. |
 | React Router DOM | Permite gestionar la navegación entre las distintas vistas. |
 | CSS | Permite definir los estilos y la apariencia de la aplicación. |
+| Bootstrap | Framework para facilitar y acelerar la creación de interfaces de usuario. |
 
 ## 2. Backend
 

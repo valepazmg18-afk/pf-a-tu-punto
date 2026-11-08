@@ -1,0 +1,46 @@
+
+.gallery-header {
+  text-align: center;
+  padding: 45px 20px 30px;
+}
+
+.gallery-header h1 {
+  font-family: 'Playfair Display', serif;
+  color: #59443F;
+  font-size: 36px;
+  margin-bottom: 12px;
+}
+
+.gallery-header p {
+  font-family: 'Inter', sans-serif;
+  color: #8A7770;
+  font-size: 16px;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 30px 50px;
+}
+
+/* Tablets */
+@media (max-width: 900px) {
+  .products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Celulares */
+@media (max-width: 480px) {
+  .gallery-header h1 {
+    font-size: 28px;
+  }
+
+  .products-grid {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+}

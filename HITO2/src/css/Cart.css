@@ -1,0 +1,41 @@
+/* Encabezado del carrito */
+.cart-title {
+  color: #59443F;
+  font-family: 'Playfair Display', serif;
+}
+
+/* Tabla */
+.cart-table {
+  background-color: #FFF9F2;
+  color: #59443F;
+  border-color: #E7D8D3;
+}
+
+.cart-table thead th {
+  background-color: #F8E8EE;
+  color: #59443F;
+  font-weight: 600;
+  border-bottom: 2px solid #E7D8D3;
+}
+
+.cart-table tbody td {
+  background-color: #FFF9F2;
+  color: #59443F;
+  border-color: #E7D8D3;
+}
+
+/* Botones de cantidad */
+.cart-table .btn-outline-secondary {
+  color: #C98291;
+  border-color: #C98291;
+}
+
+.cart-table .btn-outline-secondary:hover:not(:disabled) {
+  background-color: #C98291;
+  color: #FFF9F2;
+}
+
+/* Total */
+.cart-total {
+  color: #59443F;
+}

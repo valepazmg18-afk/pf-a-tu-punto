@@ -1,0 +1,153 @@
+
+.login-page {
+  background-color: #FFF9F2;
+  min-height: 75vh;
+  padding: 40px 20px 55px;
+}
+
+.login-heading {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.login-heading h1 {
+  color: #59443F;
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  margin-bottom: 5px;
+}
+
+.login-heading p {
+  color: #8A7770;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  margin: 0;
+}
+
+.login-content {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 30px;
+  max-width: 1060px;
+  margin: 0 auto;
+}
+
+.login-image {
+  width: 48%;
+  object-fit: cover;
+  border-radius: 9px;
+}
+
+.login-container {
+  background-color: #FFFFFF;
+  width: 48%;
+  padding: 25px;
+  border: 1px solid #E7D8D3;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.login-form .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #E7D8D3;
+  border-radius: 6px;
+  background-color: #FFFFFF;
+  color: #59443F;
+  outline: none;
+  font-size: 14px;
+}
+
+.login-form input:focus {
+  border-color: #C98291;
+}
+
+.login-form input::placeholder {
+  color: #8A7770;
+}
+
+.login-button {
+  width: 100%;
+  background-color: #C98291;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 6px;
+  padding: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.login-button:hover {
+  background-color: #B66F7E;
+}
+
+.login-register-link {
+  text-align: center;
+  color: #59443F;
+  font-size: 13px;
+  margin: 18px 0 0;
+}
+
+.login-register-link a {
+  color: #C98291;
+  text-decoration: none;
+  margin-left: 8px;
+}
+
+.login-register-link a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 700px) {
+  .login-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .login-image,
+  .login-container {
+    width: 100%;
+    max-width: 480px;
+  }
+
+  .login-image {
+    height: 280px;
+  }
+
+  .login-container {
+    padding: 25px 20px;
+  }
+}
+
+/* Mensaje de error del inicio de sesión */
+.login-error {
+  color: #B34444;
+  background-color: #FCEEEE;
+  border: 1px solid #E8C5C5;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Estado del botón mientras inicia sesión */
+.login-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

@@ -1,0 +1,85 @@
+
+/* Panel principal */
+.admin-dashboard {
+  min-height: 100vh;
+  padding: 40px;
+  background-color: #FFF9F2;
+  color: #59443F;
+}
+
+/* Encabezado */
+.admin-dashboard-header {
+  margin-bottom: 35px;
+}
+
+.admin-dashboard-header h1 {
+  margin: 0 0 10px;
+  color: #59443F;
+  font-family: 'Playfair Display', serif;
+  font-size: 30px;
+}
+
+.admin-dashboard-header p {
+  margin: 0;
+  color: #8A7770;
+  font-size: 15px;
+}
+
+/* Tarjetas */
+.admin-dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 25px;
+  max-width: 850px;
+}
+
+.admin-dashboard-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 28px;
+  background-color: #FFFFFF;
+  border: 1px solid #E8D8D2;
+  border-radius: 14px;
+  box-shadow: 0 3px 12px rgba(89, 68, 63, 0.06);
+}
+
+.admin-dashboard-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 55px;
+  height: 55px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background-color: #F5E3E7;
+  color: #C98291;
+}
+
+.admin-dashboard-card p {
+  margin: 0 0 8px;
+  color: #8A7770;
+  font-size: 14px;
+}
+
+.admin-dashboard-card h2 {
+  margin: 0;
+  color: #59443F;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+/* Adaptación móvil */
+@media (max-width: 768px) {
+  .admin-dashboard {
+    padding: 25px 18px;
+  }
+
+  .admin-dashboard-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-dashboard-header h1 {
+    font-size: 25px;
+  }
+}

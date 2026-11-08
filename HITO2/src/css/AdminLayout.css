@@ -1,0 +1,123 @@
+
+/* Estructura general */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #FFF9F2;
+}
+
+/* Barra lateral */
+.admin-sidebar {
+  width: 250px;
+  min-width: 250px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 18px;
+  background-color: #59443F;
+  color: #FFF9F2;
+}
+
+/* Marca */
+.admin-sidebar-brand {
+  padding: 0 12px 35px;
+  border-bottom: 1px solid rgba(255, 249, 242, 0.2);
+}
+
+.admin-sidebar-brand h2 {
+  margin: 0;
+  font-family: 'Playfair Display', serif;
+  font-size: 27px;
+  color: #FFF9F2;
+}
+
+.admin-sidebar-brand p {
+  margin: 6px 0 0;
+  color: #EBC5D2;
+  font-size: 13px;
+}
+
+/* Navegación */
+.admin-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.admin-sidebar-nav a,
+.admin-sidebar-logout {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
+  border: none;
+  border-radius: 8px;
+  color: #FFF9F2;
+  background-color: transparent;
+  font-family: inherit;
+  font-size: 14px;
+  text-decoration: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.admin-sidebar-nav a:hover,
+.admin-sidebar-logout:hover {
+  background-color: rgba(235, 197, 210, 0.15);
+}
+
+.admin-sidebar-nav a.active {
+  background-color: #C98291;
+  color: #FFFFFF;
+}
+
+/* Cerrar sesión */
+.admin-sidebar-logout {
+  margin-top: auto;
+  width: 100%;
+  border-top: 1px solid rgba(255, 249, 242, 0.2);
+  border-radius: 0;
+  padding-top: 22px;
+}
+
+/* Contenido */
+.admin-content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Adaptación móvil */
+@media (max-width: 768px) {
+  .admin-layout {
+    flex-direction: column;
+  }
+
+  .admin-sidebar {
+    width: 100%;
+    min-width: 100%;
+    min-height: auto;
+    padding: 18px;
+  }
+
+  .admin-sidebar-brand {
+    padding-bottom: 15px;
+  }
+
+  .admin-sidebar-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 15px;
+  }
+
+  .admin-sidebar-nav a {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .admin-sidebar-logout {
+    margin-top: 15px;
+    padding: 12px;
+  }
+}

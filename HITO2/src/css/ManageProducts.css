@@ -1,0 +1,249 @@
+
+/* Contenedor principal */
+.manage-products {
+  width: 100%;
+  min-height: 100vh;
+  padding: 40px;
+  background-color: #FFF9F2;
+  color: #59443F;
+}
+
+/* Encabezado */
+.manage-products-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.manage-products-header h1 {
+  margin: 0;
+  color: #59443F;
+  font-family: 'Playfair Display', serif;
+  font-size: 30px;
+}
+
+.manage-products-header button,
+.product-form-actions button {
+  background-color: #C98291;
+  color: #FFF9F2;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 22px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.manage-products-header button:hover,
+.product-form-actions button:hover {
+  background-color: #B76F80;
+}
+
+/* Formulario */
+.product-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 35px;
+  padding: 30px;
+  background-color: #FFFFFF;
+  border: 1px solid #E8D8D2;
+  border-radius: 14px;
+  box-shadow: 0 3px 12px rgba(89, 68, 63, 0.06);
+}
+
+.product-form h2,
+.product-form > p,
+.product-form > label:nth-of-type(4),
+.product-form > label:nth-of-type(6),
+.product-form > label:nth-of-type(7),
+.product-form > label:nth-of-type(8),
+.product-form > label:nth-of-type(9),
+.product-image-preview,
+.form-error,
+.product-form-actions {
+  grid-column: 1 / -1;
+}
+
+.product-form h2 {
+  margin: 0;
+  color: #59443F;
+  font-family: 'Playfair Display', serif;
+}
+
+.product-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #59443F;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.product-form input:not([type="checkbox"]),
+.product-form select,
+.product-form textarea {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #D8C8C2;
+  border-radius: 7px;
+  background-color: #FFFDFC;
+  color: #59443F;
+  font: inherit;
+  font-weight: 400;
+}
+
+.product-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.product-form input:focus,
+.product-form select:focus,
+.product-form textarea:focus {
+  outline: none;
+  border-color: #C98291;
+  box-shadow: 0 0 0 2px rgba(201, 130, 145, 0.15);
+}
+
+.product-form input[type="file"] {
+  padding: 10px;
+}
+
+/* Tallas */
+.product-form-sizes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.product-form-sizes > div {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 130px;
+  padding: 15px;
+  border: 1px solid #E8D8D2;
+  border-radius: 8px;
+}
+
+.product-form-sizes label {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.product-form-sizes input[type="checkbox"] {
+  accent-color: #C98291;
+}
+
+/* Vista previa */
+.product-image-preview img {
+  display: block;
+  padding: 8px;
+  border: 1px solid #E8D8D2;
+  border-radius: 10px;
+  background-color: #FFF9F2;
+}
+
+/* Mensajes */
+.form-error {
+  margin: 0;
+  color: #B34444;
+  font-size: 14px;
+}
+
+/* Botones del formulario */
+.product-form-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.product-form-actions button[type="button"] {
+  background-color: #8A7770;
+}
+
+.product-form-actions button[type="button"]:hover {
+  background-color: #59443F;
+}
+
+/* Tabla */
+.manage-products table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(89, 68, 63, 0.06);
+}
+
+.manage-products th {
+  padding: 16px;
+  background-color: #59443F;
+  color: #FFF9F2;
+  font-size: 14px;
+  text-align: left;
+}
+
+.manage-products td {
+  padding: 15px 16px;
+  border-bottom: 1px solid #EFE4DE;
+  color: #59443F;
+  font-size: 14px;
+}
+
+.manage-products tbody tr:hover {
+  background-color: #FFF5F3;
+}
+
+.manage-products tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.manage-products td button {
+  margin-right: 7px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: #EBC5D2;
+  color: #59443F;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.manage-products td button:hover {
+  background-color: #D9A8B7;
+}
+
+.manage-products td button:last-child {
+  background-color: #F2E1DC;
+}
+
+/* Adaptación a pantallas pequeñas */
+@media (max-width: 768px) {
+  .manage-products {
+    padding: 20px 15px;
+  }
+
+  .manage-products-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .product-form {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+
+  .product-form > * {
+    grid-column: 1;
+  }
+
+  .manage-products table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}

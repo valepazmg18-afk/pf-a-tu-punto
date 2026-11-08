@@ -1,0 +1,159 @@
+
+/* ==============================
+   BARRA DE NAVEGACIÓN
+============================== */
+
+.navbar {
+  background-color: #FFF9F2;
+  padding: 20px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #E7D8D3;
+  position: relative;
+  z-index: 100;
+}
+
+.navbar-brand {
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar-brand p {
+  margin: 0;
+}
+
+/* Nombre de la tienda */
+
+.navbar-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 42px;
+  font-weight: 700;
+  color: #59443F;
+  text-decoration: none;
+  letter-spacing: 0.3px;
+}
+
+/* Botón hamburguesa: oculto en escritorio */
+
+.navbar-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #59443F;
+  cursor: pointer;
+  padding: 5px;
+}
+
+/* Menú de navegación */
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Enlaces */
+
+.navbar-links a {
+  color: #59443F;
+  text-decoration: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  transition: color 0.2s ease;
+}
+
+.navbar-links a:hover {
+  color: #C98291;
+}
+
+/* Carrito */
+
+.navbar-cart {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.navbar-cart a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.cart-count {
+  position: absolute;
+  top: -9px;
+  right: -10px;
+  background-color: #C98291;
+  color: #FFF9F2;
+  font-size: 11px;
+  font-weight: bold;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ==============================
+   VERSIÓN MÓVIL
+============================== */
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 14px 20px;
+  }
+
+  .navbar-logo {
+    font-size: 32px;
+  }
+
+  /* Mostrar botón hamburguesa */
+
+  .navbar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Menú desplegable */
+
+  .navbar-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    padding: 10px 0;
+    background-color: #FFF9F2;
+    border-top: 1px solid #E7D8D3;
+    border-bottom: 1px solid #E7D8D3;
+    box-shadow: 0 5px 10px rgba(89, 68, 63, 0.10);
+  }
+
+  .navbar-links.active {
+    display: flex;
+  }
+
+  .navbar-links li {
+    width: 100%;
+    text-align: center;
+    padding: 12px;
+  }
+
+  .navbar-links a {
+    font-size: 16px;
+  }
+
+  .navbar-cart {
+    justify-content: center;
+  }
+}

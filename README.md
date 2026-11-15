@@ -279,15 +279,19 @@ El proyecto cuenta con las etapas de diseño, desarrollo frontend y desarrollo b
 
 La aplicación frontend se encuentra desplegada en Render. La integración entre frontend y backend fue probada en entorno local, verificando las funcionalidades principales de autenticación, administración de productos y carrito de compras.
 
-El backend cuenta con pruebas automatizadas y conexión a PostgreSQL.
+El backend se encuentra desplegado en Render, cuenta con pruebas automatizadas y conexión a una base de datos PostgreSQL.
 
-**Nota:** La URL pública indicada corresponde al frontend. La disponibilidad de la integración completa en producción depende de contar con el backend desplegado y configurar la URL de la API correspondiente.
+**Nota:** La URL pública indicada corresponde al frontend. Aunque el backend y la base de datos PostgreSQL ya se encuentran desplegados en Render, la conexión entre el frontend y la API en producción está pendiente de configuración. Por este motivo, los productos y las funcionalidades que dependen de su consulta al backend podrían no visualizarse o funcionar correctamente en el entorno desplegado.
 
 ## Despliegue
 
 **Plataforma frontend:** Render
 
 **URL pública:** https://pf-a-tu-punto-hito2.onrender.com
+
+**Plataforma backend:** Render
+
+**Base de datos:** PostgreSQL (Render)
 
 ## Desarrollado por
 

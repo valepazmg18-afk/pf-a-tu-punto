@@ -1,20 +1,22 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import loginTejidos from '../assets/login-tejidos.png'
+import loginTejidos from "../assets/login-tejidos.png";
 import "../css/Login.css";
 
 function Login() {
   const { iniciarSesion } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState("");
+  const [cargando, setCargando] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
     const formulario = e.target;
-    const email = formulario.email.value.trim();
+    const correo = formulario.email.value.trim();
     const password = formulario.password.value;
 
     if (password.length < 6) {
@@ -22,14 +24,23 @@ function Login() {
       return;
     }
 
-    iniciarSesion({
-      nombre: email.split("@")[0],
-      email,
-      rol: "cliente",
-    });
+    try {
+      setCargando(true);
 
-    formulario.reset();
-    navigate("/perfil");
+      const usuario = await iniciarSesion(correo, password);
+
+      formulario.reset();
+
+      if (usuario.rol === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/perfil");
+      }
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setCargando(false);
+    }
   };
 
   return (
@@ -72,8 +83,12 @@ function Login() {
 
             {error && <p className="login-error">{error}</p>}
 
-            <button type="submit" className="login-button">
-              Iniciar sesión
+            <button
+              type="submit"
+              className="login-button"
+              disabled={cargando}
+            >
+              {cargando ? "Ingresando..." : "Iniciar sesión"}
             </button>
           </form>
 

@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+
 import mantaRosa from "../assets/manta-rosa.png";
 import chalecoTejido from "../assets/chaleco-tejido.png";
 import bufandaArtesanal from "../assets/bufanda-artesanal.png";
@@ -6,90 +7,84 @@ import cardiganCrochet from "../assets/cardigan-crochet.png";
 
 const ProductContext = createContext();
 
-const productosIniciales = [
-  {
-    id: 1,
-    nombre: "Manta Abrazo",
-    categoria: "Mantas",
-    precio: 45000,
+const API_URL = "http://localhost:3000/api";
+
+// Información visual de los productos
+const datosVisuales = {
+  3: {
     imagen: mantaRosa,
-    descripcion:
-      "Manta tejida a crochet, realizada con lana calidad premium 100% acrílica, suave y acogedora. Medidas: 150 x 180 cm.",
     colores: ["#EBC5D2", "#D9C6B2", "#B7C9B5"],
-    stock: 0,
     tallas: [],
   },
-  {
-    id: 2,
-    nombre: "Cardigan Aurora",
-    categoria: "Cardigans",
-    precio: 35000,
+  4: {
     imagen: chalecoTejido,
-    descripcion:
-      "Cardigan de hilo 100% acrílico, tejido a crochet, calidad premium, delicado, suave y cómodo.",
     colores: ["#D9C6B2", "#59443F", "#C98291"],
-    stock: 0,
-    tallas: [
-      { nombre: "S", stock: 0 },
-      { nombre: "M", stock: 0 },
-      { nombre: "L", stock: 0 },
-    ],
+    tallas: [{ nombre: "S" }, { nombre: "M" }, { nombre: "L" }],
   },
-  {
-    id: 3,
-    nombre: "Bufanda Amatista",
-    categoria: "Bufandas",
-    precio: 10000,
+  5: {
     imagen: bufandaArtesanal,
-    descripcion:
-      "Bufanda tejida a crochet, hecha de lana 100% acrílica, cálida y suave, perfecta para complementar tu estilo.",
     colores: ["#B7C9B5", "#E8DDAF", "#8A7770"],
-    stock: 0,
     tallas: [],
   },
-  {
-    id: 4,
-    nombre: "Kimono Encanto",
-    categoria: "Kimonos",
-    precio: 28000,
+  6: {
     imagen: cardiganCrochet,
-    descripcion:
-      "Kimono tejido a crochet, elaborado con hilo 100% algodón premium, liviano y delicado, ideal para darle un toque especial a tu look.",
     colores: ["#EBC5D2", "#D9C6B2", "#B7C9B5"],
-    stock: 0,
-    tallas: [
-      { nombre: "S", stock: 0 },
-      { nombre: "M", stock: 0 },
-      { nombre: "L", stock: 0 },
-    ],
+    tallas: [{ nombre: "S" }, { nombre: "M" }, { nombre: "L" }],
   },
-];
+};
 
 export function ProductProvider({ children }) {
-  const [productos, setProductos] = useState(() => {
-    const productosGuardados = localStorage.getItem("productos");
+  const [productos, setProductos] = useState([]);
 
-    if (!productosGuardados) {
-      return productosIniciales;
-    }
-
-    const productosParseados = JSON.parse(productosGuardados);
-
-    return productosParseados.map((producto) => {
-      const productoOriginal = productosIniciales.find(
-        (inicial) => inicial.id === producto.id,
-      );
-
-      return {
-        ...producto,
-        imagen: productoOriginal?.imagen || producto.imagen,
-      };
-    });
-  });
-
+  // Guardar los productos en localStorage
   useEffect(() => {
     localStorage.setItem("productos", JSON.stringify(productos));
   }, [productos]);
+
+  // Obtener productos desde PostgreSQL
+  useEffect(() => {
+    const obtenerProductos = async () => {
+      try {
+        const respuesta = await fetch(`${API_URL}/productos`);
+
+        if (!respuesta.ok) {
+          throw new Error("No se pudieron obtener los productos");
+        }
+
+        const datos = await respuesta.json();
+
+        const productosBackend = Array.isArray(datos)
+          ? datos
+          : datos.productos || [];
+
+        const productosAdaptados = productosBackend.map((producto) => {
+          const visual = datosVisuales[producto.id_producto] || {};
+
+          return {
+            id: producto.id_producto,
+            nombre: producto.nombre,
+            descripcion: producto.descripcion || "",
+            precio: Number(producto.precio),
+            stock: producto.stock,
+            imagen: producto.imagen_url
+              ? `http://localhost:3000${producto.imagen_url}`
+              : producto.imagen_eliminada
+                ? ""
+                : visual.imagen || "",
+            colores: visual.colores || [],
+            tallas: visual.tallas || [],
+            activo: producto.activo,
+          };
+        });
+
+        setProductos(productosAdaptados);
+      } catch (error) {
+        console.error("Error al cargar productos:", error);
+      }
+    };
+
+    obtenerProductos();
+  }, []);
 
   return (
     <ProductContext.Provider value={{ productos, setProductos }}>

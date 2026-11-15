@@ -25,3 +25,25 @@ export async function iniciarSesionAPI(correo, password) {
     usuario: datos.usuario,
   };
 }
+
+export async function registrarUsuarioAPI(nombre, correo, password) {
+  const respuesta = await fetch(`${API_URL}/auth/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      nombre,
+      correo,
+      password,
+    }),
+  });
+
+  const datos = await respuesta.json();
+
+  if (!respuesta.ok) {
+    throw new Error(datos.mensaje || "No se pudo registrar el usuario.");
+  }
+
+  return datos;
+}

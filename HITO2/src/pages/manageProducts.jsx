@@ -1,6 +1,6 @@
-
 import { useState } from "react";
 import { useProducts } from "../context/ProductContext";
+import { useAuth } from "../context/AuthContext";
 import "../css/ManageProducts.css";
 
 const formularioInicial = {
@@ -17,6 +17,11 @@ const formularioInicial = {
 
 function ManageProducts() {
   const { productos, setProductos } = useProducts();
+
+  const { token } = useAuth();
+  const [archivoImagen, setArchivoImagen] = useState(null);
+
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [productoEditando, setProductoEditando] = useState(null);
@@ -49,9 +54,7 @@ function ManageProducts() {
     setFormulario((actual) => ({
       ...actual,
       tallas: actual.tallas.map((talla) =>
-        talla.nombre === nombre
-          ? { ...talla, stock: Number(stock) }
-          : talla
+        talla.nombre === nombre ? { ...talla, stock: Number(stock) } : talla,
       ),
     }));
   };
@@ -63,14 +66,17 @@ function ManageProducts() {
 
     if (!archivo.type.startsWith("image/")) {
       setError("Selecciona un archivo de imagen válido.");
-      return;
-    }
-
-    if (archivo.size > 1024 * 1024) {
-      setError("La imagen debe pesar menos de 1 MB.");
       e.target.value = "";
       return;
     }
+
+    if (archivo.size > 5 * 1024 * 1024) {
+      setError("La imagen debe pesar menos de 5 MB.");
+      e.target.value = "";
+      return;
+    }
+
+    setArchivoImagen(archivo);
 
     const lector = new FileReader();
 
@@ -92,12 +98,14 @@ function ManageProducts() {
   const abrirFormulario = () => {
     setProductoEditando(null);
     setFormulario(formularioInicial);
+    setArchivoImagen(null);
     setError("");
     setMostrarFormulario(true);
   };
 
   const editarProducto = (producto) => {
     setProductoEditando(producto.id);
+    setArchivoImagen(null);
 
     setFormulario({
       nombre: producto.nombre,
@@ -115,67 +123,130 @@ function ManageProducts() {
     setMostrarFormulario(true);
   };
 
-  const guardarProducto = (e) => {
+  const guardarProducto = async (e) => {
     e.preventDefault();
     setError("");
+
+    const categorias = {
+      Mantas: 1,
+      Bufandas: 2,
+      Kimonos: 3,
+      Cardigans: 4,
+    };
 
     if (
       !formulario.nombre.trim() ||
       !formulario.categoria ||
       !formulario.precio ||
-      !formulario.descripcion.trim() ||
-      !formulario.imagen
+      !formulario.descripcion.trim()
     ) {
-      setError("Completa los campos obligatorios y selecciona una imagen.");
+      setError("Completa todos los campos obligatorios.");
       return;
     }
 
-    const datosProducto = {
-      nombre: formulario.nombre.trim(),
-      categoria: formulario.categoria,
-      precio: Number(formulario.precio),
-      stock:
-        formulario.tallas.length > 0 ? 0 : Number(formulario.stock),
-      descripcion: formulario.descripcion.trim(),
-      tallas: formulario.tallas,
-      colores: formulario.colores
-        .split(",")
-        .map((color) => color.trim())
-        .filter(Boolean),
-      medidas: formulario.medidas.trim(),
-      imagen: formulario.imagen,
-    };
+    const idCategoria = categorias[formulario.categoria];
 
-    if (productoEditando !== null) {
-      setProductos((actuales) =>
-        actuales.map((producto) =>
-          producto.id === productoEditando
-            ? { ...producto, ...datosProducto }
-            : producto
-        )
+    if (!idCategoria) {
+      setError(
+        "La categoría seleccionada no está registrada en la base de datos.",
       );
-    } else {
-      const nuevoProducto = {
-        id: Date.now(),
-        ...datosProducto,
-      };
-
-      setProductos((actuales) => [...actuales, nuevoProducto]);
+      return;
     }
 
-    setFormulario(formularioInicial);
-    setProductoEditando(null);
-    setMostrarFormulario(false);
+    if (!productoEditando && !archivoImagen) {
+      setError("Selecciona una imagen para el producto.");
+      return;
+    }
+
+    const datos = new FormData();
+
+    datos.append("nombre", formulario.nombre.trim());
+    datos.append("id_categoria", idCategoria);
+    datos.append("precio", Number(formulario.precio));
+    datos.append(
+      "stock",
+      formulario.tallas.length > 0 ? 0 : Number(formulario.stock),
+    );
+    datos.append("descripcion", formulario.descripcion.trim());
+    datos.append("medidas", formulario.medidas.trim());
+
+    if (archivoImagen) {
+      datos.append("imagen", archivoImagen);
+    } else if (productoEditando !== null && !formulario.imagen) {
+      datos.append("eliminar_imagen", "true");
+    }
+
+    try {
+      const respuesta = await fetch(
+        productoEditando !== null
+          ? `${API_URL}/productos/${productoEditando}`
+          : `${API_URL}/productos`,
+        {
+          method: productoEditando !== null ? "PUT" : "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: datos,
+        },
+      );
+
+      const resultado = await respuesta.json();
+
+      if (!respuesta.ok) {
+        throw new Error(resultado.mensaje || "No se pudo guardar el producto.");
+      }
+
+      const productoAPI = resultado.producto;
+
+      const productoGuardado = {
+        id: productoAPI.id_producto,
+        nombre: productoAPI.nombre,
+        descripcion: productoAPI.descripcion || "",
+        precio: Number(productoAPI.precio),
+        stock: Number(productoAPI.stock),
+        categoria: formulario.categoria,
+        medidas: productoAPI.medidas || "",
+        imagen: productoAPI.imagen_url
+          ? `http://localhost:3000${productoAPI.imagen_url}`
+          : formulario.imagen,
+        colores: formulario.colores
+          .split(",")
+          .map((color) => color.trim())
+          .filter(Boolean),
+        tallas: formulario.tallas,
+        activo: productoAPI.activo ?? true,
+      };
+
+      if (productoEditando !== null) {
+        setProductos((actuales) =>
+          actuales.map((producto) =>
+            producto.id === productoEditando
+              ? { ...producto, ...productoGuardado }
+              : producto,
+          ),
+        );
+      } else {
+        setProductos((actuales) => [...actuales, productoGuardado]);
+      }
+
+      setFormulario(formularioInicial);
+      setArchivoImagen(null);
+      setProductoEditando(null);
+      setMostrarFormulario(false);
+    } catch (error) {
+      console.error("Error al guardar producto:", error);
+      setError(error.message || "Ocurrió un error al guardar el producto.");
+    }
   };
 
   const eliminarProducto = (id) => {
     const confirmar = window.confirm(
-      "¿Estás segura de que deseas eliminar este producto?"
+      "¿Estás segura de que deseas eliminar este producto?",
     );
 
     if (confirmar) {
       setProductos((actuales) =>
-        actuales.filter((producto) => producto.id !== id)
+        actuales.filter((producto) => producto.id !== id),
       );
     }
   };
@@ -185,17 +256,13 @@ function ManageProducts() {
       <div className="manage-products-header">
         <h1>Gestionar productos</h1>
 
-        <button onClick={abrirFormulario}>
-          Agregar producto
-        </button>
+        <button onClick={abrirFormulario}>Agregar producto</button>
       </div>
 
       {mostrarFormulario && (
         <form className="product-form" onSubmit={guardarProducto}>
           <h2>
-            {productoEditando !== null
-              ? "Editar producto"
-              : "Agregar producto"}
+            {productoEditando !== null ? "Editar producto" : "Agregar producto"}
           </h2>
 
           <label>
@@ -253,7 +320,7 @@ function ManageProducts() {
           <div className="product-form-sizes">
             {["S", "M", "L"].map((nombre) => {
               const talla = formulario.tallas.find(
-                (item) => item.nombre === nombre
+                (item) => item.nombre === nombre,
               );
 
               return (
@@ -322,16 +389,48 @@ function ManageProducts() {
 
           <label>
             Imagen del producto
-            <input
-              type="file"
-              accept="image/*"
-              onChange={seleccionarImagen}
-            />
+            <input type="file" accept="image/*" onChange={seleccionarImagen} />
           </label>
 
           {formulario.imagen && (
-            <div className="product-image-preview">
+            <div
+              className="product-image-preview"
+              style={{ position: "relative", width: "160px" }}
+            >
               <p>Vista previa:</p>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setFormulario((actual) => ({
+                    ...actual,
+                    imagen: "",
+                  }));
+                  setArchivoImagen(null);
+                }}
+                title="Eliminar imagen"
+                aria-label="Eliminar imagen seleccionada"
+                style={{
+                  position: "absolute",
+                  top: "25px",
+                  right: "-8px",
+                  width: "28px",
+                  height: "28px",
+                  borderRadius: "50%",
+                  border: "none",
+                  background: "#d9534f",
+                  color: "#fff",
+                  fontSize: "18px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                ×
+              </button>
+
               <img
                 src={formulario.imagen}
                 alt="Vista previa del producto"
@@ -387,7 +486,7 @@ function ManageProducts() {
                 {producto.tallas?.length > 0
                   ? producto.tallas.reduce(
                       (total, talla) => total + talla.stock,
-                      0
+                      0,
                     )
                   : producto.stock}
               </td>
@@ -397,9 +496,7 @@ function ManageProducts() {
                   : "—"}
               </td>
               <td>
-                <button onClick={() => editarProducto(producto)}>
-                  Editar
-                </button>
+                <button onClick={() => editarProducto(producto)}>Editar</button>
 
                 <button onClick={() => eliminarProducto(producto.id)}>
                   Eliminar

@@ -7,11 +7,9 @@ function AdminDashboard() {
   const { productos } = useProducts();
 
   const totalProductos = productos.length;
+
   const productosActivos = productos.filter(
-    (producto) =>
-      producto.tallas?.length > 0
-        ? producto.tallas.some((talla) => talla.stock > 0)
-        : producto.stock > 0
+    (producto) => producto.activo
   ).length;
 
   return (

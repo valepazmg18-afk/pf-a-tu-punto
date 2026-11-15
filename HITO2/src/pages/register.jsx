@@ -1,44 +1,52 @@
 
-import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
-import registroTejidos from '../assets/registro-tejidos.png'
-import '../css/Register.css'
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import registroTejidos from "../assets/registro-tejidos.png";
+import "../css/Register.css";
 
 function Register() {
-  const { iniciarSesion } = useAuth()
-  const navigate = useNavigate()
+  const { registrarUsuario, iniciarSesion } = useAuth();
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const [cargando, setCargando] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
 
-    const formulario = e.target
-    const nombre = formulario.nombre.value
-    const email = formulario.email.value
-    const telefono = formulario.telefono.value
-    const password = formulario.password.value
-    const confirmPassword = formulario.confirmPassword.value
+    const formulario = e.target;
+    const nombre = formulario.nombre.value.trim();
+    const correo = formulario.email.value.trim();
+    const telefono = formulario.telefono.value.trim();
+    const password = formulario.password.value;
+    const confirmPassword = formulario.confirmPassword.value;
 
     if (password.length < 6) {
-      alert('La contraseña debe contener al menos 6 caracteres.')
-      return
+      setError("La contraseña debe contener al menos 6 caracteres.");
+      return;
     }
 
     if (password !== confirmPassword) {
-      alert('Las contraseñas no coinciden.')
-      return
+      setError("Las contraseñas no coinciden.");
+      return;
     }
 
-    iniciarSesion({
-      nombre,
-      email,
-      telefono,
-    })
+    try {
+      setCargando(true);
 
-    alert('¡Registro exitoso! Bienvenido/a a A Tu Punto.')
+      await registrarUsuario(nombre, correo, password);
 
-    formulario.reset()
-    navigate('/perfil')
-  }
+      await iniciarSesion(correo, password);
+
+      formulario.reset();
+      navigate("/perfil");
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setCargando(false);
+    }
+  };
 
   return (
     <section className="register-page">
@@ -103,8 +111,14 @@ function Register() {
               />
             </div>
 
-            <button type="submit" className="register-button">
-              Crear cuenta
+            {error && <p className="login-error">{error}</p>}
+
+            <button
+              type="submit"
+              className="register-button"
+              disabled={cargando}
+            >
+              {cargando ? "Registrando..." : "Crear cuenta"}
             </button>
           </form>
 
@@ -114,7 +128,7 @@ function Register() {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
-export default Register
+export default Register;

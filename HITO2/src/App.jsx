@@ -1,4 +1,3 @@
-
 import { Routes, Route } from 'react-router-dom'
 import MainLayout from './layouts/MainLayout'
 import AdminLayout from './layouts/AdminLayout'
@@ -23,11 +22,15 @@ function App() {
         <Route path="/producto/:id" element={<ProductDetail />} />
         <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Register />} />
-        <Route path="/perfil" element={<Profile />} />
-        <Route path="/carrito" element={<Cart />} />
+
+        {/* Rutas privadas para usuarios autenticados */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/perfil" element={<Profile />} />
+          <Route path="/carrito" element={<Cart />} />
+        </Route>
       </Route>
 
-      {/* Rutas protegidas de administración */}
+      {/* Rutas privadas de administración */}
       <Route element={<ProtectedRoute requiredRole="admin" />}>
         <Route element={<AdminLayout />}>
           <Route path="/admin" element={<AdminDashboard />} />

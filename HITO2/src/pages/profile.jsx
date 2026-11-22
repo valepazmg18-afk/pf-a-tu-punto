@@ -5,30 +5,37 @@ import { useAuth } from "../context/AuthContext";
 import "../css/Profile.css";
 
 function Profile() {
-  const { usuario, iniciarSesion, cerrarSesion } = useAuth();
+  const { usuario, actualizarPerfil, cerrarSesion } = useAuth();
   const navigate = useNavigate();
 
   const [editando, setEditando] = useState(false);
   const [nombre, setNombre] = useState(usuario?.nombre || "");
-  const [email, setEmail] = useState(usuario?.email || "");
+  const [email, setEmail] = useState(usuario?.correo || "");
   const [telefono, setTelefono] = useState(usuario?.telefono || "");
 
   const [passwordActual, setPasswordActual] = useState("");
   const [nuevaPassword, setNuevaPassword] = useState("");
   const [confirmarPassword, setConfirmarPassword] = useState("");
 
-  const handleEditar = (e) => {
+  const handleEditar = async (e) => {
     e.preventDefault();
 
-    iniciarSesion({
-      ...usuario,
-      nombre,
-      email,
-      telefono,
-    });
+    try {
+      const usuarioActualizado = await actualizarPerfil({
+        nombre,
+        correo: email,
+        telefono,
+      });
 
-    setEditando(false);
-    alert("¡Información actualizada correctamente!");
+      setNombre(usuarioActualizado.nombre);
+      setEmail(usuarioActualizado.correo);
+      setTelefono(usuarioActualizado.telefono || "");
+
+      setEditando(false);
+      alert("¡Información actualizada correctamente!");
+    } catch (error) {
+      alert(error.message || "No se pudo actualizar la información.");
+    }
   };
 
   const handlePassword = (e) => {
@@ -149,7 +156,7 @@ function Profile() {
                     className="profile-cancel-button"
                     onClick={() => {
                       setNombre(usuario?.nombre || "");
-                      setEmail(usuario?.email || "");
+                      setEmail(usuario?.correo || "");
                       setTelefono(usuario?.telefono || "");
                       setEditando(false);
                     }}

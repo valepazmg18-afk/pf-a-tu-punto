@@ -47,3 +47,22 @@ export async function registrarUsuarioAPI(nombre, correo, password) {
 
   return datos;
 }
+
+export async function actualizarPerfilAPI(datosUsuario, token) {
+  const respuesta = await fetch(`${API_URL}/auth/perfil`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(datosUsuario),
+  });
+
+  const datos = await respuesta.json();
+
+  if (!respuesta.ok) {
+    throw new Error(datos.mensaje || "No se pudo actualizar el perfil.");
+  }
+
+  return datos.usuario;
+}

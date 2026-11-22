@@ -1,6 +1,6 @@
 
 import { createContext, useContext, useState } from 'react';
-import { iniciarSesionAPI, registrarUsuarioAPI,} from '../services/authService';
+import { iniciarSesionAPI, registrarUsuarioAPI,  actualizarPerfilAPI} from '../services/authService';
 
 const AuthContext = createContext();
 
@@ -30,6 +30,18 @@ export function AuthProvider({ children }) {
     return await registrarUsuarioAPI(nombre, correo, password);
   };
 
+  const actualizarPerfil = async (datosUsuario) => {
+  const usuarioActualizado = await actualizarPerfilAPI(
+    datosUsuario,
+    token
+  );
+
+  localStorage.setItem("usuario", JSON.stringify(usuarioActualizado));
+  setUsuario(usuarioActualizado);
+
+  return usuarioActualizado;
+};
+
   const cerrarSesion = () => {
     localStorage.removeItem('usuario');
     localStorage.removeItem('token');
@@ -45,6 +57,7 @@ export function AuthProvider({ children }) {
         token,
         iniciarSesion,
         registrarUsuario,
+        actualizarPerfil,
         cerrarSesion,
       }}
     >

@@ -7,7 +7,9 @@ import cardiganCrochet from "../assets/cardigan-crochet.png";
 
 const ProductContext = createContext();
 
-const API_URL = "http://localhost:3000/api";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
+const API_BASE_URL = API_URL.replace(/\/api\/?$/, "");
+
 
 // Información visual de los productos
 const datosVisuales = {
@@ -67,7 +69,7 @@ export function ProductProvider({ children }) {
             precio: Number(producto.precio),
             stock: producto.stock,
             imagen: producto.imagen_url
-              ? `http://localhost:3000${producto.imagen_url}`
+              ? `${API_BASE_URL}${producto.imagen_url}`
               : producto.imagen_eliminada
                 ? ""
                 : visual.imagen || "",

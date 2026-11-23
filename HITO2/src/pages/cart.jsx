@@ -1,15 +1,10 @@
-
-import { useCart } from '../context/CartContext'
-import { Trash2 } from 'lucide-react'
-import '../css/Cart.css'
+import { useCart } from "../context/CartContext";
+import { Trash2 } from "lucide-react";
+import { Link } from "react-router-dom";
+import "../css/Cart.css";
 
 function Cart() {
-  const {
-    carrito,
-    eliminarDelCarrito,
-    modificarCantidad,
-    total,
-  } = useCart()
+  const { carrito, eliminarDelCarrito, modificarCantidad, total } = useCart();
 
   return (
     <div className="container my-5">
@@ -35,9 +30,7 @@ function Cart() {
                   <tr key={producto.id}>
                     <td>{producto.nombre}</td>
 
-                    <td>
-                      ${producto.precio.toLocaleString('es-CL')}
-                    </td>
+                    <td>${producto.precio.toLocaleString("es-CL")}</td>
 
                     <td>
                       <div className="d-flex justify-content-center align-items-center gap-2">
@@ -47,7 +40,7 @@ function Cart() {
                           onClick={() =>
                             modificarCantidad(
                               producto.id,
-                              producto.cantidad - 1
+                              producto.cantidad - 1,
                             )
                           }
                         >
@@ -61,7 +54,7 @@ function Cart() {
                           onClick={() =>
                             modificarCantidad(
                               producto.id,
-                              producto.cantidad + 1
+                              producto.cantidad + 1,
                             )
                           }
                         >
@@ -73,9 +66,7 @@ function Cart() {
                     <td className="text-center">
                       <button
                         className="btn btn-link text-danger"
-                        onClick={() =>
-                          eliminarDelCarrito(producto.id)
-                        }
+                        onClick={() => eliminarDelCarrito(producto.id)}
                         aria-label={`Eliminar ${producto.nombre}`}
                         title="Eliminar producto"
                       >
@@ -89,14 +80,18 @@ function Cart() {
           </div>
 
           <div className="text-end mt-4 cart-total">
-            <h3>
-              Total: ${total.toLocaleString('es-CL')}
-            </h3>
+            <h3>Total: ${total.toLocaleString("es-CL")}</h3>
+          </div>
+
+          <div className="text-end mt-3">
+            <Link to="/checkout" className="btn btn-finalizar-compra">
+              Finalizar compra
+            </Link>
           </div>
         </>
       )}
     </div>
-  )
+  );
 }
 
-export default Cart
+export default Cart;

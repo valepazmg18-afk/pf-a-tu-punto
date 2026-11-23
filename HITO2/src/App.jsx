@@ -10,6 +10,7 @@ import Gallery from './pages/gallery'
 import ProductDetail from './pages/productDetail'
 import Profile from './pages/profile'
 import Cart from './pages/cart'
+import Checkout from './pages/checkout'
 import AdminDashboard from './pages/adminDashboard'
 import ManageProducts from './pages/manageProducts'
 
@@ -27,6 +28,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/perfil" element={<Profile />} />
           <Route path="/carrito" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
         </Route>
       </Route>
 

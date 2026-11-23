@@ -39,3 +39,16 @@
 .cart-total {
   color: #59443F;
 }
+
+/* Botón finalizar compra */
+.btn-finalizar-compra {
+  background-color: #C98291;
+  color: #FFF9F2;
+  border: 1px solid #C98291;
+}
+
+.btn-finalizar-compra:hover {
+  background-color: #B76F7F;
+  color: #FFF9F2;
+  border-color: #B76F7F;
+}
